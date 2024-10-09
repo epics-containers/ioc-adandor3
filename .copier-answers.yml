@@ -1,0 +1,8 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 4.0.1
+_src_path: gh:epics-containers/ioc-template
+description: A Generic IOC for andor3 cameras
+git_platform: gitlab.diamond.ac.uk
+name: ioc-andor3
+repo_uri: git@gitlab.diamond.ac.uk:controls/containers/iocs/ioc-andor3.git
+rtems: false
