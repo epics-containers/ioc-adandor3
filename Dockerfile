@@ -33,6 +33,20 @@ RUN iocStats/install.sh 3.2.0
 #  TODO - Add further support module installations here
 ################################################################################
 
+
+
+WORKDIR ${SOURCE_FOLDER}/ibek-support-dls 
+
+COPY ibek-support-dls/andor-sdk3/ andor-sdk3
+# RUN andor-sdk3/install.sh master
+
+
+
+
+
+
+
+
 # get the ioc source and build it
 COPY ioc ${SOURCE_FOLDER}/ioc
 RUN cd ${IOC} && ./install.sh && make
