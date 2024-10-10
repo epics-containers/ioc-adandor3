@@ -40,7 +40,7 @@ COPY ibek-support/ADCore/ ADCore/
 RUN ADCore/install.sh R3-13
 
 COPY ibek-support/ADAndor3/ ADAndor3/
-RUN ADCore/install.sh R2-2
+RUN ADAndor3/install.sh R2-2
 
 # get the ioc source and build it
 COPY ioc ${SOURCE_FOLDER}/ioc
