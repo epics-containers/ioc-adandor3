@@ -29,9 +29,18 @@ RUN pvxs/install.sh 1.3.1
 COPY ibek-support/iocStats/ iocStats
 RUN iocStats/install.sh 3.2.0
 
-################################################################################
-#  TODO - Add further support module installations here
-################################################################################
+
+COPY ibek-support/asyn/ asyn/
+RUN asyn/install.sh R4-44-2
+
+COPY ibek-support/busy/ busy/
+RUN busy/install.sh R1-7-4
+
+COPY ibek-support/ADCore/ ADCore/
+RUN ADCore/install.sh R3-13
+
+COPY ibek-support/ADAndor3/ ADAndor3/
+RUN ADAndor3/install.sh R2-2
 
 
 
