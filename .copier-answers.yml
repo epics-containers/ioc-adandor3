@@ -2,7 +2,8 @@
 _commit: 4.0.1
 _src_path: gh:epics-containers/ioc-template
 description: A Generic IOC for andor3 cameras
-git_platform: gitlab.diamond.ac.uk
-name: ioc-andor3
-repo_uri: git@gitlab.diamond.ac.uk:controls/containers/iocs/ioc-andor3.git
+git_platform: github.com
+github_org: epics-containers
+name: ioc-adandor3
+repo_uri: git@github.com:epics-containers/ioc-adandor3
 rtems: false

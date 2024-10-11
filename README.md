@@ -1,4 +1,4 @@
-# Generic IOC Template Repository ioc-andor3
+# Generic IOC Template Repository ioc-adandor3
 
 ## Description
 A Generic IOC for andor3 cameras
@@ -13,7 +13,7 @@ To update to the latest version of the template:
 # activate a python virtual environment
 
 pip install copier
-cd ioc-andor3
+cd ioc-adandor3
 copier update -a --trust .
 ```
 
