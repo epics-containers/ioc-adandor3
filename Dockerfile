@@ -49,6 +49,8 @@ RUN cd ${IOC} && ./install.sh && make
 # install runtime proxy for non-native builds
 RUN bash ${IOC}/install_proxy.sh
 
+RUN apt install -y strace
+
 ##### runtime preparation stage ################################################
 FROM developer AS runtime_prep
 
