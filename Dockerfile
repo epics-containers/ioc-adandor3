@@ -42,20 +42,6 @@ RUN ADCore/install.sh R3-13
 COPY ibek-support/ADAndor3/ ADAndor3/
 RUN ADAndor3/install.sh R2-2
 
-
-
-WORKDIR ${SOURCE_FOLDER}/ibek-support-dls 
-
-COPY ibek-support-dls/andor-sdk3/ andor-sdk3
-# RUN andor-sdk3/install.sh master
-
-
-
-
-
-
-
-
 # get the ioc source and build it
 COPY ioc ${SOURCE_FOLDER}/ioc
 RUN cd ${IOC} && ./install.sh && make
