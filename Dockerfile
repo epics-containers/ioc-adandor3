@@ -23,12 +23,8 @@ WORKDIR ${SOURCE_FOLDER}/ibek-support
 # copy the global ibek files
 COPY ibek-support/_global/ _global
 
-COPY ibek-support/pvxs/ pvxs/
-RUN pvxs/install.sh 1.3.1
-
 COPY ibek-support/iocStats/ iocStats
 RUN iocStats/install.sh 3.2.0
-
 
 COPY ibek-support/asyn/ asyn/
 RUN asyn/install.sh R4-44-2
