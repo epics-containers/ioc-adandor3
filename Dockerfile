@@ -26,6 +26,12 @@ COPY ibek-support/_global/ _global
 COPY ibek-support/iocStats/ iocStats
 RUN iocStats/install.sh 3.2.0
 
+COPY ibek-support/autosave/ autosave/
+RUN autosave/install.sh R5-11
+
+COPY ibek-support/pvlogging/ pvlogging/
+RUN pvlogging/install.sh 1-5-2
+
 COPY ibek-support/asyn/ asyn/
 RUN asyn/install.sh R4-44-2
 
@@ -37,6 +43,9 @@ RUN ADCore/install.sh R3-13
 
 COPY ibek-support/ADAndor3/ ADAndor3/
 RUN ADAndor3/install.sh R2-2
+
+COPY ibek-support/ffmpegServer/ ffmpegServer/
+RUN ffmpegServer/install.sh R3-2
 
 # get the ioc source and build it
 COPY ioc ${SOURCE_FOLDER}/ioc
