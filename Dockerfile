@@ -1,12 +1,6 @@
-ARG IMAGE_EXT
-
 ARG REGISTRY=ghcr.io/epics-containers
-ARG RUNTIME=${REGISTRY}/epics-base${IMAGE_EXT}-runtime:7.0.10ec1
-ARG DEVELOPER=${REGISTRY}/ioc-areadetector${IMAGE_EXT}-developer:3.14ec2
-# for pre-built common support and faster builds of this generic IOC:
-# - change above to￼DEVELOPER=${REGISTRY}/ioc-asyn${IMAGE_EXT}-developer:4.45ec2
-# - comment out uv pip install lines below (unless a newer ibek is needed)
-# - remove ansible.sh lines for all support modules provided by ioc-asyn
+ARG RUNTIME=${REGISTRY}/epics-base-runtime:7.0.10ec4-beta.2
+ARG DEVELOPER=${REGISTRY}/epics-base-developer:7.0.10ec4-beta.2
 
 ##### build stage ##############################################################
 FROM  ${DEVELOPER} AS developer
@@ -30,6 +24,35 @@ COPY ibek-support/_ansible _ansible
 ENV PATH=$PATH:${SOURCE_FOLDER}/ibek-support/_ansible
 
 # get the required support modules and build them
+COPY ibek-support/iocStats/ iocStats
+RUN ansible.sh iocStats
+
+COPY ibek-support/sequencer/ sequencer
+RUN ansible.sh sequencer
+
+COPY ibek-support/sscan/ sscan
+RUN ansible.sh sscan
+
+COPY ibek-support/calc/ calc
+RUN ansible.sh calc
+
+COPY ibek-support/asyn/ asyn
+RUN ansible.sh asyn
+
+COPY ibek-support/busy/ busy
+RUN ansible.sh busy
+
+COPY ibek-support/autosave/ autosave
+RUN ansible.sh autosave
+
+COPY ibek-support/pvlogging/ pvlogging
+RUN ansible.sh pvlogging
+
+COPY ibek-support/ADCore/ ADCore
+RUN ansible.sh ADCore
+
+# Andor SDK3 (libatcore) is vendor binary only, bundled by ADAndor3 for
+# linux-x86_64 only, so this image is built for linux/amd64 only
 COPY ibek-support/ADAndor3/ ADAndor3/
 RUN ansible.sh ADAndor3
 
