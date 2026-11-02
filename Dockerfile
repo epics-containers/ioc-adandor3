@@ -1,12 +1,6 @@
-ARG IMAGE_EXT
-
 ARG REGISTRY=ghcr.io/epics-containers
-ARG RUNTIME=${REGISTRY}/epics-base${IMAGE_EXT}-runtime:7.0.10ec1
-ARG DEVELOPER=${REGISTRY}/ioc-areadetector${IMAGE_EXT}-developer:3.14ec2
-# for pre-built common support and faster builds of this generic IOC:
-# - change above to￼DEVELOPER=${REGISTRY}/ioc-asyn${IMAGE_EXT}-developer:4.45ec2
-# - comment out uv pip install lines below (unless a newer ibek is needed)
-# - remove ansible.sh lines for all support modules provided by ioc-asyn
+ARG RUNTIME=${REGISTRY}/epics-base-runtime:7.0.10ec6
+ARG DEVELOPER=${REGISTRY}/epics-base-developer:7.0.10ec6
 
 ##### build stage ##############################################################
 FROM  ${DEVELOPER} AS developer
@@ -20,7 +14,7 @@ RUN ln -s ${SOURCE_FOLDER}/ioc ${IOC}
 # Update the apt cache
 RUN apt update -y
 
-# Get the current version of ibek
+# get the current versions of pvi and ibek
 COPY requirements.txt requirements.txt
 RUN uv pip install --upgrade -r requirements.txt
 
@@ -30,6 +24,38 @@ COPY ibek-support/_ansible _ansible
 ENV PATH=$PATH:${SOURCE_FOLDER}/ibek-support/_ansible
 
 # get the required support modules and build them
+COPY ibek-support/iocStats/ iocStats
+RUN ansible.sh iocStats
+
+COPY ibek-support/sequencer/ sequencer
+RUN ansible.sh sequencer
+
+COPY ibek-support/sscan/ sscan
+RUN ansible.sh sscan
+
+COPY ibek-support/calc/ calc
+RUN ansible.sh calc
+
+COPY ibek-support/asyn/ asyn
+RUN ansible.sh asyn
+
+COPY ibek-support/busy/ busy
+RUN ansible.sh busy
+
+COPY ibek-support/autosave/ autosave
+RUN ansible.sh autosave
+
+COPY ibek-support/pvlogging/ pvlogging
+RUN ansible.sh pvlogging
+
+COPY ibek-support/ADCore/ ADCore
+RUN ansible.sh ADCore
+
+COPY ibek-support/ffmpegServer/ ffmpegServer
+RUN ansible.sh ffmpegServer
+
+# Andor SDK3 (libatcore) is vendor binary only, bundled by ADAndor3 for
+# linux-x86_64 only, so this image is built for linux/amd64 only
 COPY ibek-support/ADAndor3/ ADAndor3/
 RUN ansible.sh ADAndor3
 
@@ -40,12 +66,20 @@ RUN ansible.sh ioc
 # install runtime proxy for non-native builds
 RUN bash ${IOC}/install_proxy.sh
 
+# generate a manifest of installed EPICS modules and python packages
+# IOC_VERSION is declared here, not earlier: every RUN after an ARG sees it,
+# so a new value (each branch or tag) would rebuild all the steps above
+ARG IOC_VERSION=unknown
+COPY scripts/generate_manifest.py /tmp/generate_manifest.py
+RUN python3 /tmp/generate_manifest.py "${IOC_VERSION}"
+
 ##### runtime preparation stage ################################################
 FROM developer AS runtime_prep
 
 # get the products from the build stage and reduce to runtime assets only
 # /python is created by uv and is needed in the runtime target
-RUN ibek ioc extract-runtime-assets /assets /python
+# /epics/versions.json is the manifest of support module and python versions
+RUN ibek ioc extract-runtime-assets /assets /python /epics/versions.json
 
 ##### runtime stage ############################################################
 FROM ${RUNTIME} AS runtime
