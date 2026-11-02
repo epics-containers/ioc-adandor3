@@ -51,6 +51,9 @@ RUN ansible.sh pvlogging
 COPY ibek-support/ADCore/ ADCore
 RUN ansible.sh ADCore
 
+COPY ibek-support/ffmpegServer/ ffmpegServer
+RUN ansible.sh ffmpegServer
+
 # Andor SDK3 (libatcore) is vendor binary only, bundled by ADAndor3 for
 # linux-x86_64 only, so this image is built for linux/amd64 only
 COPY ibek-support/ADAndor3/ ADAndor3/
