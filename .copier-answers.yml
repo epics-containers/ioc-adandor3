@@ -1,9 +1,8 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: 5.0.3
+_commit: 5.1.4
 _src_path: gh:epics-containers/ioc-template
 arm64: false
 description: A Generic IOC for andor3 cameras
 git_platform: github.com
 github_org: epics-containers
 name: ioc-adandor3
-repo_uri: git@github.com:epics-containers/ioc-adandor3
