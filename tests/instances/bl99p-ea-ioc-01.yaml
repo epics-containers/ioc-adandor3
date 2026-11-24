@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=/epics/ibek-defs/ADAndor3.ibek.support.yaml
+# Copied from https://gitlab.diamond.ac.uk/controls/containers/beamline/p99-services
+# services/bl99p-ea-ioc-01/config/ioc.yaml at commit 21e2c8d3785eedec76ec5e3a994d01ab1a71e2fa
+# Unchanged: it has no device addresses or passwords.
+# tests/run-tests.sh runs it with start.sh --test, which generates the
+# runtime assets but does not launch the IOC.
+
+# TODO replace above with the generic IOC schema this IOC is based on
+ioc_name: "{{ _global.get_env('IOC_NAME') }}"
+
+description: REPLACE WITH DESCRIPTION
+
+entities:
+  - type: epics.EpicsEnvSet
+    name: EPICS_TS_MIN_WEST
+    value: "0"
+
+  - type: devIocStats.iocAdminSoft
+    IOC: "{{ ioc_name | upper }}"
+
+  - type: epics.EpicsCaMaxArrayBytes
+    max_bytes: 9000000
+
+  - type: ADAndor3.andor3
+    BUFFERS: 50
+    P: BL99P-EA-DET-01
+    PORT: DET1.CAM
+    R: ":CAM:"
+    SCANRATE: .1 second
+    SET_SDK_ENV: "True"
+    ANDOR_SDK3: /data
